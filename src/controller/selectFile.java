@@ -20,13 +20,11 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
-
 /**
  * Created by Adriel on 4/9/2017.
  */
 public class selectFile extends JFrame {
-    public  String filepath;
+    public String filepath;
     public Document doc;
 
 
@@ -47,6 +45,8 @@ public class selectFile extends JFrame {
         selectButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 JFileChooser chooser = new JFileChooser();
+                File workingDirectory = new File(System.getProperty("user.dir"));
+                chooser.setCurrentDirectory(workingDirectory);
                 chooser.setMultiSelectionEnabled(true);
                 int option = chooser.showOpenDialog(selectFile.this);
                 if (option == JFileChooser.APPROVE_OPTION) {
@@ -78,27 +78,22 @@ public class selectFile extends JFrame {
                             // get the salary element, and update the value
                             if ("salary".equals(node.getNodeName())) {
                                 String xmlVal = node.getTextContent();
-                                StringBuilder numberChange = new StringBuilder(xmlVal);
-
                                 //get the 18 number of the list
-                                int getNum = Integer.parseInt(xmlVal.substring(18, 20));
-                                Integer IdNum = getNum;
-                                IdNum = IdNum + 1;
+                                int replaceChart = Integer.parseInt(xmlVal.substring(18, 22));
+                                int counter = replaceChart + 1;
+                                StringBuilder stringBuilder = new StringBuilder(xmlVal);
+                                stringBuilder.replace(18, 22, String.format("%04d", counter));
+                                String newMyName = stringBuilder.toString();
 
-                                numberChange.setCharAt(18, (char)(IdNum + '0'));
-
-                                System.out.println(getNum);
-                                System.out.println(IdNum);
-
-                                node.setTextContent("000000000000000000"+IdNum +"0000000000000000000000000");
+                                System.out.println(newMyName);
+                                node.setTextContent(newMyName);
                             }
                         }
 
                     } catch (ParserConfigurationException | IOException | SAXException pce) {
                         pce.printStackTrace();
                     }
-                }
-                else {
+                } else {
                     statusbar.setText("You canceled.");
                 }
             }
@@ -114,7 +109,7 @@ public class selectFile extends JFrame {
                     Transformer transformer = transformerFactory.newTransformer();
                     DOMSource source = new DOMSource(doc);
                     StreamResult result = new StreamResult(new File(filepath));
-                    if (result == null){
+                    if (result == null) {
                         System.out.println("no file select");
                     }
                     transformer.transform(source, result);
