@@ -1,4 +1,4 @@
-import controller.selectFile;
+import controller.increaseDataFile;
 
 /**
  * Created by walterad on 7-4-2017.
@@ -6,7 +6,7 @@ import controller.selectFile;
 public class Main {
 
     public static void main(String args[]) {
-        selectFile sfc = new selectFile();
+        increaseDataFile sfc = new increaseDataFile();
         sfc.setVisible(true);
     }
 
